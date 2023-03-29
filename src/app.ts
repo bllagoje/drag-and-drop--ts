@@ -53,6 +53,18 @@ class ProjectState extends State<Project> {
     addProject(title: string, description: string, numOfPeople: number) {
         const newProject = new Project(Math.random().toString(), title, description, numOfPeople, ProjectStatus.Active)
         this.projects.push(newProject)
+        this.updateListeners()
+    }
+
+    moveProject(projectId: string, newStatus: ProjectStatus) {
+        let project = this.projects.find(prj => prj.id === projectId)
+        if(project && project.status !== newStatus) {
+            project.status = newStatus
+            this.updateListeners()
+        }
+    }
+
+    private updateListeners() {
         for(const listenerFn of this.listeners) {
             listenerFn(this.projects.slice())
         }
@@ -162,8 +174,8 @@ class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> implements 
         event.dataTransfer!.effectAllowed = "move"
     }
 
-    dragEndHandler(event: DragEvent) {
-        
+    dragEndHandler(_: DragEvent) {
+        console.log('DragEnd');
     }
 
     configure() {
@@ -199,15 +211,16 @@ class ProjectList extends Component<HTMLElement, HTMLElement> implements DragTar
         }
     }
 
+    @autobind
     dropHandler(event: DragEvent) {
-        
+        let prjId = event.dataTransfer!.getData("text/plain")
+        projectState.moveProject(prjId, this.type === "active" ? ProjectStatus.Active : ProjectStatus.Finished)
     }
 
     @autobind
-    dragLeaveHandler(event: DragEvent) {
+    dragLeaveHandler(_: DragEvent) {
         let listEl = this.element.querySelector("ul")!
         listEl.classList.remove("droppable")
-
     }
 
     private renderProjects() {
