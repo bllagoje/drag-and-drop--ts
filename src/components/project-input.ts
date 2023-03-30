@@ -1,7 +1,7 @@
 // ProjectInput class
-import { Component } from "./base-component.js"
-import { Validatable, validate } from "../util/validation.js"
-import { autobind } from "../decorators/autobind.js"
+import Component from "./base-component.js"
+import * as Validation from "../util/validation.js"
+import { autobind as Autobind } from "../decorators/autobind.js"
 import { projectState } from "../state/project-state.js"
 
 export class ProjectInput extends Component<HTMLElement, HTMLFormElement> {
@@ -29,14 +29,14 @@ export class ProjectInput extends Component<HTMLElement, HTMLFormElement> {
         const enteredDescription = this.descriptionInputElement.value
         const enteredPeople = this.peopleInputElement.value
 
-        const titleValidatable: Validatable = { value: enteredTitle, required: true }
-        const descriptionValidatable: Validatable = { value: enteredDescription, required: true, minLength: 5 }
-        const peopleValidatable: Validatable = { value: +enteredPeople, required: true, min: 1, max: 5 }
+        const titleValidatable: Validation.Validatable = { value: enteredTitle, required: true }
+        const descriptionValidatable: Validation.Validatable = { value: enteredDescription, required: true, minLength: 5 }
+        const peopleValidatable: Validation.Validatable = { value: +enteredPeople, required: true, min: 1, max: 5 }
 
         if(
-            !validate(titleValidatable) ||
-            !validate(descriptionValidatable) ||
-            !validate(peopleValidatable)
+            !Validation.validate(titleValidatable) ||
+            !Validation.validate(descriptionValidatable) ||
+            !Validation.validate(peopleValidatable)
         ) {
             alert("Invalid input!")
             return
@@ -51,7 +51,7 @@ export class ProjectInput extends Component<HTMLElement, HTMLFormElement> {
         this.peopleInputElement.value = ""
     }
 
-    @autobind
+    @Autobind
     private submitHandler(event: Event) {
         event.preventDefault()
         // console.log(this.titleInputElement.value)
