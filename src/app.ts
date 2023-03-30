@@ -1,7 +1,7 @@
 // ProjectList
-import { ProjectList } from "./components/project-list.js"
+import { ProjectList } from "./components/project-list"
 // ProjectInput
-import { ProjectInput } from "./components/project-input.js"
+import { ProjectInput } from "./components/project-input"
 
 
 // --------------------------------------------------
